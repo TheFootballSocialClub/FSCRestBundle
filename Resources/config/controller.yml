@@ -1,0 +1,8 @@
+services:
+    fsc.common.rest.controller.root:
+        class: FSC\Common\RestBundle\Controller\RootController
+        arguments:
+          - []
+          - @fos_rest.view_handler
+          - @fsc.common.rest.factory.atom_link
+          - @router

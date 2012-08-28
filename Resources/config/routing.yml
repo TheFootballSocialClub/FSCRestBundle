@@ -1,0 +1,5 @@
+services:
+    fsc.common.rest.routing.loader:
+        class: FSC\Common\RestBundle\Routing\RestLoader
+        tags:
+          - { name: routing.loader }

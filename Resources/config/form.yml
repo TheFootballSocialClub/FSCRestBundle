@@ -1,0 +1,24 @@
+services:
+    fsc.common.rest.form.renderer:
+        class: FSC\Common\RestBundle\Form\RestFormRenderer
+        arguments:
+          - @fsc.common.rest.form.engine
+
+    fsc.common.rest.form.engine:
+        class: FSC\Common\RestBundle\Form\RestRendererEngine
+
+    fsc.common.rest.collection.form:
+        class: Symfony\Component\Form\Form
+        factory_service: form.factory
+        factory_method: createNamed
+        arguments:
+          - search
+          - fsc_common_rest_collection
+
+    fsc.common.rest.collection_search.form:
+        class: Symfony\Component\Form\Form
+        factory_service: form.factory
+        factory_method: createNamed
+        arguments:
+          - search
+          - fsc_common_rest_collection_search

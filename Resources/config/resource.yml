@@ -1,0 +1,22 @@
+parameters:
+    fsc.common.rest.factory.atom_link.rel_prefix: ''
+
+services:
+    fsc.common.rest.factory.atom_link:
+        class: FSC\Common\RestBundle\REST\AtomLinkFactory
+        arguments:
+          - %fsc.common.rest.factory.atom_link.rel_prefix%
+
+    fsc.common.rest.resource.abstract:
+        abstract: true
+        class: FSC\Common\RestBundle\REST\AbstractResource
+        calls:
+          - [ setEntityManager, [ @doctrine.orm.entity_manager ] ]
+          - [ setViewHandler, [ @fos_rest.view_handler ] ]
+          - [ setRouter, [ @router ] ]
+          - [ setFormNormalizer, [ @fsc.common.rest.normalizer.form ] ]
+          - [ setFormFactory, [ @form.factory ] ]
+          - [ setSerializerXmlSerializationVisitor, [ @jms_serializer.xml_serialization_visitor ] ]
+          - [ setAtomLinkFactory, [ @fsc.common.rest.factory.atom_link ] ]
+          - [ setSecurityContext, [ @security.context ] ]
+          - [ setContainer, [ @service_container ] ]

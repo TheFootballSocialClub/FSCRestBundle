@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use JMS\DiExtraBundle\Annotation as DI;
 
 use FSC\Common\RestBundle\Form\EventListener\RemoveNonSubmittedFieldListener;
-use FSC\Common\RestBundle\Form\EventListener\ReplaceNullSubmittedValuesByDefaultsListener;
+use FSC\Common\RestBundle\Form\EventListener\ReplaceNotSubmittedValuesByDefaultsListener;
 
 /**
  * @DI\FormType
@@ -17,7 +17,7 @@ class CollectionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $subscriber = new ReplaceNullSubmittedValuesByDefaultsListener($builder->getFormFactory());
+        $subscriber = new ReplaceNotSubmittedValuesByDefaultsListener($builder->getFormFactory());
         $builder->addEventSubscriber($subscriber);
 
         $builder->add('page', 'hidden', array('required' => false, 'attr' => array(

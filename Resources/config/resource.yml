@@ -11,12 +11,15 @@ services:
         abstract: true
         class: FSC\Common\RestBundle\REST\AbstractResource
         calls:
-          - [ setEntityManager, [ @doctrine.orm.entity_manager ] ]
-          - [ setViewHandler, [ @fos_rest.view_handler ] ]
           - [ setRouter, [ @router ] ]
           - [ setFormNormalizer, [ @fsc.common.rest.normalizer.form ] ]
           - [ setFormFactory, [ @form.factory ] ]
-          - [ setSerializerXmlSerializationVisitor, [ @jms_serializer.xml_serialization_visitor ] ]
           - [ setAtomLinkFactory, [ @fsc.common.rest.factory.atom_link ] ]
           - [ setSecurityContext, [ @security.context ] ]
           - [ setContainer, [ @service_container ] ]
+
+    fsc.common.rest.resource.abstract_doctrine:
+        abstract: true
+        parent: fsc.common.rest.resource.abstract
+        calls:
+          - [ setEntityManager, [ @doctrine.orm.entity_manager ] ]

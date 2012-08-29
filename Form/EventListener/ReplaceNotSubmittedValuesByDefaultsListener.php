@@ -8,11 +8,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvents;
 
 /**
- * ReplaceNullSubmittedValuesByDefaultsListener
+ * ReplaceNotSubmittedValuesByDefaultsListener
  *
  * @author Adrien Brault <adrien.brault@gmail.com>
  */
-class ReplaceNullSubmittedValuesByDefaultsListener implements EventSubscriberInterface
+class ReplaceNotSubmittedValuesByDefaultsListener implements EventSubscriberInterface
 {
     private $factory;
     private $ignoreRequiredFields;

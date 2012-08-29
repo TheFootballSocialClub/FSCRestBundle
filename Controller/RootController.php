@@ -45,7 +45,7 @@ class RootController
         $rootRepresentation = new Resource();
 
         foreach ($this->resources as $rel => $resource) { /** @var $resource \FSC\Common\RestBundle\REST\AbstractResource */
-            $href = $this->router->generate($resource->getRouteName('collection'), array(), true);
+            $href = $this->router->generate($resource->getRouteNameProvider()->getCollectionRouteName(), array(), true);
             $rootRepresentation->addLink($this->atomLinkFactory->create($rel, $href));
         }
 

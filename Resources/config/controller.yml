@@ -6,3 +6,11 @@ services:
           - @fos_rest.view_handler
           - @fsc.common.rest.factory.atom_link
           - @router
+
+    fsc.common.rest.resource.controller:
+        abstract: true
+        class: FSC\Common\RestBundle\Controller\ResourceController
+        arguments:
+          - null # The resource
+          - @fos_rest.view_handler
+          - @jms_serializer.xml_serialization_visitor

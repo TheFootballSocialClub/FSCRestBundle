@@ -3,7 +3,6 @@
 namespace FSC\RestBundle\Tests\Functional\Normalizer;
 
 use FSC\RestBundle\Tests\Functional\TestCase;
-use FSC\RestBundle\Form\Model\Collection;
 use FSC\RestBundle\Form\RestRendererEngine;
 
 class FormNormalizerTest extends TestCase

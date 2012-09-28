@@ -2,8 +2,6 @@
 
 namespace FSC\RestBundle\Normalizer;
 
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Util\PropertyPath;
@@ -18,7 +16,7 @@ use FSC\RestBundle\REST\AtomLinkFactory;
  *
  * @author Adrien Brault <adrien.brault@gmail.com>
  */
-class FormNormalizer extends SerializerAwareNormalizer implements NormalizerInterface
+class FormNormalizer
 {
     /**
      * @var AtomLinkFactory

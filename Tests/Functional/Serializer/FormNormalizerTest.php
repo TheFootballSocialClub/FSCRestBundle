@@ -21,9 +21,8 @@ class FormNormalizerTest extends SerializationTestCase
         ));
 
         $formNormalizer = new FormNormalizer();
-        $symfonySerializer = new SymfonySerializer(array($formNormalizer));
 
-        $normalizedForm = $symfonySerializer->normalize($form);
+        $normalizedForm = $formNormalizer->normalize($form);
 
         $this->assertSerializedXmlEquals(
 '<form>

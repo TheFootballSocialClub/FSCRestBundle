@@ -1,11 +1,16 @@
 {
     "name": "fsc/rest-bundle",
     "require": {
+        "symfony/framework-bundle": "2.1.*",
         "jms/serializer-bundle": "dev-xml-attribute-map as 0.9.0",
         "friendsofsymfony/rest-bundle": "dev-master"
     },
     "require-dev": {
-        "symfony/symfony": "2.1.*"
+        "symfony/class-loader": "*",
+        "symfony/twig-bundle": "*",
+        "symfony/yaml": "*",
+        "symfony/form": "*",
+        "symfony/validator": "*"
     },
     "repositories": [
         {

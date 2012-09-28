@@ -15,6 +15,11 @@ for each resource...
 
 This bundle was extracted from an app, and need some love to be usable. (ie composer, make tests work etc ...)
 
+LICENSE
+-------
+
+MIT: Resources/meta/LICENSE
+
 TODO
 ----
 

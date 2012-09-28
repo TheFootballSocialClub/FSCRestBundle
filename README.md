@@ -9,7 +9,7 @@ The representations are optimized for the XML format, but are also usable in JSO
 
 If you create relations between resources, the bundle will automatically create links between them.
 
-The design tooks obviously many shortchuts, and is not an example of OOP design, but it works.
+The design obviously took many shortchuts, and is not a reference of OOP design ... but it works.
 But it's easy to override behavior because you need to the extend the classe that does everything,
 for each resource...
 

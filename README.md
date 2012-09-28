@@ -3,8 +3,13 @@ FSCRestBundle
 
 This bundle will generate a REST HATEOAS api based on the configuration you'll do.
 ATM it can only generate a read only api, backed by doctrine ORM.
+The representations are optimized for the XML format, but are also usable in JSON.
+
+If you create relations between resources, the bundle will automatically create links between them.
 
 The design tooks obviously many shortchuts, and is not an example of OOP design, but it works.
+But it's easy to override behavior because you need to the extend the classe that does everything,
+for each resource...
 
 This bundle was extracted from an app, and need some love to be usable. (ie composer, make tests work etc ...)
 
@@ -13,6 +18,8 @@ https://github.com/schmittjoh/JMSSerializerBundle/pull/164
 
 Example
 -------
+
+For an example of what the controller returns: https://gist.github.com/3800069
 
 You need to define services, tagged with `fsc_rest.resource`.
 
@@ -186,3 +193,17 @@ class SpotsResource extends AbstractSocialEntityResource
     }
 }
 ```
+
+
+More details
+------------
+
+When you request a resource, the bundle will:
+
+```
+Entity --(normalize)--> Representation --(serialize)--> XML/JSON
+             ||                              ||
+       Representations                  JMSSerializer
+```
+
+

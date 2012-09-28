@@ -1,6 +1,8 @@
 FSCRestBundle
 =============
 
+[![Build Status](https://secure.travis-ci.org/TheFootballSocialClub/FSCRestBundle.png)](http://travis-ci.org/TheFootballSocialClub/FSCRestBundle)
+
 This bundle will generate a REST HATEOAS api based on the configuration you'll do.
 ATM it can only generate a read only api, backed by doctrine ORM.
 The representations are optimized for the XML format, but are also usable in JSON.

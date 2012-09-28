@@ -1,0 +1,13 @@
+{
+    "name": "fsc/rest-bundle",
+    "require": {
+        "jms/serializer-bundle": "dev-xml-attribute-map as 0.9.0"
+    },
+    "repositories": {
+        {
+            "type": "vcs",
+            "url": "https://github.com/adrienbrault/JMSSerializerBundle"
+        }
+    }
+}
+

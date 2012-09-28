@@ -203,7 +203,7 @@ When you request a resource, the bundle will:
 ```
 Entity --(normalize)--> Representation --(serialize)--> XML/JSON
              ||                              ||
-       Representations                  JMSSerializer
+        RESTResources                   JMSSerializer
 ```
 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace FSC\Common\RestBundle\Routing;
+namespace FSC\RestBundle\Routing;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface as SFUrlGeneratorInterface;
 use Symfony\Component\Form\Util\PropertyPathInterface;

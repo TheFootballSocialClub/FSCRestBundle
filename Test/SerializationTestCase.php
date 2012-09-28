@@ -1,8 +1,8 @@
 <?php
 
-namespace FSC\Common\RestBundle\Test;
+namespace FSC\RestBundle\Test;
 
-use FSC\Common\Test\FunctionalTestCase;
+use FSC\Test\FunctionalTestCase;
 
 abstract class SerializationTestCase extends FunctionalTestCase
 {

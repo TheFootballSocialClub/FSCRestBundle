@@ -1,8 +1,8 @@
 <?php
 
-namespace FSC\Common\RestBundle\Tests\Model\Representation;
+namespace FSC\RestBundle\Tests\Model\Representation;
 
-use FSC\Common\RestBundle\Model\Representation\AtomLink;
+use FSC\RestBundle\Model\Representation\AtomLink;
 
 class AtomLinkTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,12 +15,12 @@ class AtomLinkTest extends \PHPUnit_Framework_TestCase
         $atomLink = AtomLink::create($rel, $href, $type);
         $atomLinkWithoutType = AtomLink::create($rel, $href);
 
-        $this->assertInstanceOf('FSC\Common\RestBundle\Model\Representation\AtomLink', $atomLink);
+        $this->assertInstanceOf('FSC\RestBundle\Model\Representation\AtomLink', $atomLink);
         $this->assertEquals($rel, $atomLink->rel);
         $this->assertEquals($href, $atomLink->href);
         $this->assertEquals($type, $atomLink->type);
 
-        $this->assertInstanceOf('FSC\Common\RestBundle\Model\Representation\AtomLink', $atomLinkWithoutType);
+        $this->assertInstanceOf('FSC\RestBundle\Model\Representation\AtomLink', $atomLinkWithoutType);
         $this->assertEquals($rel, $atomLinkWithoutType->rel);
         $this->assertEquals($href, $atomLinkWithoutType->href);
     }

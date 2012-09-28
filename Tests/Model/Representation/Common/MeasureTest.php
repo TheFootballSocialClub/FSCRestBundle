@@ -1,8 +1,8 @@
 <?php
 
-namespace FSC\Common\RestBundle\Tests\Model\Representation\Common;
+namespace FSC\RestBundle\Tests\Model\Representation\Common;
 
-use FSC\Common\RestBundle\Model\Representation\Common\Measure;
+use FSC\RestBundle\Model\Representation\Common\Measure;
 
 class MeasureTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,11 +14,11 @@ class MeasureTest extends \PHPUnit_Framework_TestCase
         $measure = Measure::create($value, $unit);
         $measureWithoutUnit = Measure::create($value);
 
-        $this->assertInstanceOf('FSC\Common\RestBundle\Model\Representation\Common\Measure', $measure);
+        $this->assertInstanceOf('FSC\RestBundle\Model\Representation\Common\Measure', $measure);
         $this->assertEquals($value, $measure->value);
         $this->assertEquals($unit, $measure->unit);
 
-        $this->assertInstanceOf('FSC\Common\RestBundle\Model\Representation\Common\Measure', $measure);
+        $this->assertInstanceOf('FSC\RestBundle\Model\Representation\Common\Measure', $measure);
         $this->assertEquals($value, $measureWithoutUnit->value);
         $this->assertNull($measureWithoutUnit->unit);
     }

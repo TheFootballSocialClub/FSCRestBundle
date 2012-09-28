@@ -1,16 +1,19 @@
 services:
-    fsc.common.rest.controller.root:
-        class: FSC\Common\RestBundle\Controller\RootController
-        arguments:
-          - []
-          - @fos_rest.view_handler
-          - @fsc.common.rest.factory.atom_link
-          - @router
+    fsc.rest.controller.root.default:
+        class: FSC\RestBundle\Controller\RootController
+        calls:
+          - [ setViewHandler, [ @fos_rest.view_handler ] ]
+          - [ setAtomLinkFactory, [ @fsc.rest.factory.atom_link ] ]
+          - [ setRouter, [ @router ] ]
 
-    fsc.common.rest.resource.controller:
+    fsc.rest.controller.root:
+        alias: fsc.rest.controller.root.default
+
+    fsc.rest.resource.controller:
         abstract: true
-        class: FSC\Common\RestBundle\Controller\ResourceController
+        class: FSC\RestBundle\Controller\ResourceController
         arguments:
           - null # The resource
+          - @fsc.rest.normalizer.form
           - @fos_rest.view_handler
           - @jms_serializer.xml_serialization_visitor

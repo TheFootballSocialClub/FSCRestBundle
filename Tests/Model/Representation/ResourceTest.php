@@ -1,8 +1,8 @@
 <?php
 
-namespace FSC\Common\RestBundle\Tests\Model\Representation;
+namespace FSC\RestBundle\Tests\Model\Representation;
 
-use FSC\Common\RestBundle\Model\Representation\Resource;
+use FSC\RestBundle\Model\Representation\Resource;
 
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace FSC\Common\RestBundle\Model\Representation;
+namespace FSC\RestBundle\Model\Representation;
 
 use JMS\SerializerBundle\Annotation as Serializer;
 
@@ -14,16 +14,14 @@ class Entity extends Resource
     /**
      * @var array
      *
-     * @Serializer\XmlKeyValuePairs()
-     * @Serializer\Inline()
+     * @Serializer\XmlList(inline=true, entry="collection")
      */
     protected $collections;
 
     /**
      * @var array
      *
-     * @Serializer\XmlKeyValuePairs()
-     * @Serializer\Inline()
+     * @Serializer\XmlList(inline=true, entry="relation")
      */
     protected $relations;
 

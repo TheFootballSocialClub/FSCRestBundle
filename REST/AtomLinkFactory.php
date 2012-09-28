@@ -1,8 +1,8 @@
 <?php
 
-namespace FSC\Common\RestBundle\REST;
+namespace FSC\RestBundle\REST;
 
-use FSC\Common\RestBundle\Model\Representation\AtomLink;
+use FSC\RestBundle\Model\Representation\AtomLink;
 
 /**
  * @author Adrien Brault <adrien.brault@gmail.com>
@@ -14,7 +14,7 @@ class AtomLinkFactory
      *
      * @var array
      */
-    static protected $ianaRelations = array(
+    protected static $ianaRelations = array(
         'alternate', 'appendix', 'archives', 'author', 'bookmark', 'canonical', 'chapter', 'collection', 'contents',
         'copyright', 'current', 'describedby', 'disclosure', 'duplicate', 'edit', 'edit-media', 'enclosure', 'first',
         'glossary', 'help', 'hosts', 'hub', 'icon', 'index', 'item', 'last', 'latest-version', 'license', 'lrdd',
@@ -33,15 +33,20 @@ class AtomLinkFactory
 
     public function create($rel, $href, $type = null)
     {
-        if (!in_array($rel, static::$ianaRelations)) {
-            $rel = $this->relPrefix.$rel;
-        }
-
-        return AtomLink::create($rel, $href, $type);
+        return AtomLink::create($this->getRel($rel), $href, $type);
     }
 
     public static function getIanaRelations()
     {
         return static::$ianaRelations;
+    }
+
+    public function getRel($rel)
+    {
+        if (!in_array($rel, static::$ianaRelations)) {
+            $rel = $this->relPrefix.$rel;
+        }
+
+        return $rel;
     }
 }

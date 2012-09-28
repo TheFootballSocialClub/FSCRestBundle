@@ -1,13 +1,13 @@
 <?php
 
-namespace FSC\Common\RestBundle;
+namespace FSC\RestBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use FSC\Common\RestBundle\DependencyInjection\Compiler\RestResourceCompilerPass;
+use FSC\RestBundle\DependencyInjection\Compiler\RestResourceCompilerPass;
 
-class FSCCommonRestBundle extends Bundle
+class FSCRestBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {

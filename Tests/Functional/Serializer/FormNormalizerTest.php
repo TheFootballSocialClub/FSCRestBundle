@@ -1,11 +1,11 @@
 <?php
 
-namespace FSC\Common\RestBundle\Tests\Functional\Normalizer;
+namespace FSC\RestBundle\Tests\Functional\Serializer;
 
-use FSC\Common\RestBundle\Test\SerializationTestCase;
+use FSC\RestBundle\Test\SerializationTestCase;
 use Symfony\Component\Serializer\Serializer as SymfonySerializer;
 
-use FSC\Common\RestBundle\Normalizer\FormNormalizer;
+use FSC\RestBundle\Normalizer\FormNormalizer;
 
 class FormNormalizerTest extends SerializationTestCase
 {
@@ -20,9 +20,7 @@ class FormNormalizerTest extends SerializationTestCase
             'description' => 'THIS IS SPARTA',
         ));
 
-        $formRenderer = $this->get('fsc.common.rest.form.renderer');
-
-        $formNormalizer = new FormNormalizer($formRenderer);
+        $formNormalizer = new FormNormalizer();
         $symfonySerializer = new SymfonySerializer(array($formNormalizer));
 
         $normalizedForm = $symfonySerializer->normalize($form);

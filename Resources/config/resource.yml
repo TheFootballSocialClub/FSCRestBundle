@@ -1,25 +1,25 @@
 parameters:
-    fsc.common.rest.factory.atom_link.rel_prefix: ''
+    fsc.rest.factory.atom_link.rel_prefix: ''
 
 services:
-    fsc.common.rest.factory.atom_link:
-        class: FSC\Common\RestBundle\REST\AtomLinkFactory
+    fsc.rest.factory.atom_link:
+        class: FSC\RestBundle\REST\AtomLinkFactory
         arguments:
-          - %fsc.common.rest.factory.atom_link.rel_prefix%
+          - %fsc.rest.factory.atom_link.rel_prefix%
 
-    fsc.common.rest.resource.abstract:
+    fsc.rest.resource.abstract:
         abstract: true
-        class: FSC\Common\RestBundle\REST\AbstractResource
-        calls:
-          - [ setRouter, [ @router ] ]
-          - [ setFormNormalizer, [ @fsc.common.rest.normalizer.form ] ]
-          - [ setFormFactory, [ @form.factory ] ]
-          - [ setAtomLinkFactory, [ @fsc.common.rest.factory.atom_link ] ]
-          - [ setSecurityContext, [ @security.context ] ]
-          - [ setContainer, [ @service_container ] ]
+        class: FSC\RestBundle\REST\AbstractResource
+        arguments:
+            - @router
+            - @fsc.rest.normalizer.form
+            - @form.factory
+            - @fsc.rest.factory.atom_link
+            - @security.context
+            - @service_container
 
-    fsc.common.rest.resource.abstract_doctrine:
+    fsc.rest.resource.abstract_doctrine:
         abstract: true
-        parent: fsc.common.rest.resource.abstract
+        parent: fsc.rest.resource.abstract
         calls:
           - [ setEntityManager, [ @doctrine.orm.entity_manager ] ]

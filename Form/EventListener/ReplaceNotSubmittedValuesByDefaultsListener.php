@@ -1,6 +1,6 @@
 <?php
 
-namespace FSC\Common\RestBundle\Form\EventListener;
+namespace FSC\RestBundle\Form\EventListener;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormFactoryInterface;

@@ -1,5 +1,5 @@
-fsc_common_rest_root:
+fsc_rest_root:
     pattern:   /
-    defaults:  { _controller: fsc.common.rest.controller.root:indexAction }
+    defaults:  { _controller: fsc.rest.controller.root:indexAction }
     requirements:
         _method: GET

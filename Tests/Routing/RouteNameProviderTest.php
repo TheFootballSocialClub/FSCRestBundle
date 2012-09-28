@@ -1,8 +1,8 @@
 <?php
 
-namespace FSC\Common\RestBundle\Tests\Routing;
+namespace FSC\RestBundle\Tests\Routing;
 
-use FSC\Common\RestBundle\Routing\RouteNameProvider;
+use FSC\RestBundle\Routing\RouteNameProvider;
 
 class RouteNameProviderTest extends \PHPUnit_Framework_TestCase
 {

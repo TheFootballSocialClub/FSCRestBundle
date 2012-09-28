@@ -1,6 +1,6 @@
 <?php
 
-namespace FSC\Common\RestBundle\Model\Representation;
+namespace FSC\RestBundle\Model\Representation;
 
 use JMS\SerializerBundle\Annotation as Serializer;
 
@@ -8,6 +8,8 @@ use JMS\SerializerBundle\Annotation as Serializer;
  * Collection
  *
  * @author Adrien Brault <adrien.brault@gmail.com>
+ *
+ * @Serializer\XmlRoot("collection")
  */
 class Collection extends Resource
 {

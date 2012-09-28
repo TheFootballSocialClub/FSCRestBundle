@@ -1,10 +1,10 @@
 services:
-    fsc.common.rest.normalizer.form:
-        class: FSC\Common\RestBundle\Normalizer\FormNormalizer
+    fsc.rest.normalizer.form:
+        class: FSC\RestBundle\Normalizer\FormNormalizer
         arguments:
-          - @fsc.common.rest.form.renderer
+          - @fsc.rest.factory.atom_link
 
-    fsc.common.rest.normalizer.pagerfanta:
-        class: FSC\Common\RestBundle\Normalizer\PagerfantaNormalizer
+    fsc.rest.normalizer.pagerfanta:
+        class: FSC\RestBundle\Normalizer\PagerfantaNormalizer
         arguments:
-          - FSC\Common\RestBundle\Model\Representation\Collection
+          - FSC\RestBundle\Model\Representation\Collection

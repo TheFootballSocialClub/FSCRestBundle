@@ -1,14 +1,12 @@
 <?php
 
-namespace FSC\Common\RestBundle\Routing;
+namespace FSC\RestBundle\Routing;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Route;
 
-use FSC\Common\RestBundle\REST\ResourceInterface;
-use FSC\Common\RestBundle\REST\AbstractResource;
+use FSC\RestBundle\REST\AbstractResource;
 
 class RestLoader implements LoaderInterface
 {

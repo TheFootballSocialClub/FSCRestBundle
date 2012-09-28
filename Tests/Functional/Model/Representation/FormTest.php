@@ -1,11 +1,11 @@
 <?php
 
-namespace FSC\Common\RestBundle\Tests\Functional\Model\Representation;
+namespace FSC\RestBundle\Tests\Functional\Model\Representation;
 
-use FSC\Common\RestBundle\Test\SerializationTestCase;
+use FSC\RestBundle\Test\SerializationTestCase;
 
-use FSC\Common\RestBundle\Model\Representation\Form\Form;
-use FSC\Common\RestBundle\Model\Representation\AtomLink;
+use FSC\RestBundle\Model\Representation\Form\Form;
+use FSC\RestBundle\Model\Representation\AtomLink;
 
 class FormTest extends SerializationTestCase
 {

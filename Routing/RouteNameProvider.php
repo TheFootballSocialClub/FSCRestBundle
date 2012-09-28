@@ -1,6 +1,6 @@
 <?php
 
-namespace FSC\Common\RestBundle\Routing;
+namespace FSC\RestBundle\Routing;
 
 class RouteNameProvider implements RouteNameProviderInterface
 {
@@ -18,7 +18,7 @@ class RouteNameProvider implements RouteNameProviderInterface
 
     public function getCollectionFormRouteName($formRel)
     {
-        return $this->resourceBaseRoute.'_collection_form_'.$formRel;
+        return $this->resourceBaseRoute.'_collection_form_'.$this->normalizeRel($formRel);
     }
 
     public function getEntityRouteName()
@@ -28,16 +28,21 @@ class RouteNameProvider implements RouteNameProviderInterface
 
     public function getEntityFormRouteName($formRel)
     {
-        return $this->resourceBaseRoute.'_entity_form_'.$formRel;
+        return $this->resourceBaseRoute.'_entity_form_'.$this->normalizeRel($formRel);
     }
 
     public function getEntityCollectionRouteName($collectionRel)
     {
-        return $this->resourceBaseRoute.'_entity_collection_'.$collectionRel;
+        return $this->resourceBaseRoute.'_entity_collection_'.$this->normalizeRel($collectionRel);
     }
 
     public function getEntityCollectionFormRouteName($collectionRel, $formRel)
     {
-        return $this->resourceBaseRoute.'_entity_collection_'.$collectionRel.'_form_'.$formRel;
+        return $this->resourceBaseRoute.'_entity_collection_'.$this->normalizeRel($collectionRel).'_form_'.$this->normalizeRel($formRel);
+    }
+
+    public static function normalizeRel($rel)
+    {
+        return preg_replace('/[^0-9a-zA-Z_.]+/', '', $rel);
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace FSC\Common\RestBundle\Tests\Functional\Model\Representation;
+namespace FSC\RestBundle\Tests\Functional\Model\Representation;
 
-use FSC\Common\RestBundle\Test\SerializationTestCase;
+use FSC\RestBundle\Test\SerializationTestCase;
 
-use FSC\Common\RestBundle\Model\Representation\Common\Measure;
+use FSC\RestBundle\Model\Representation\Common\Measure;
 
 class MeasureTest extends SerializationTestCase
 {

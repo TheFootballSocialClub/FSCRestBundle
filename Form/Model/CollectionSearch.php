@@ -1,6 +1,6 @@
 <?php
 
-namespace FSC\Common\RestBundle\Form\Model;
+namespace FSC\RestBundle\Form\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

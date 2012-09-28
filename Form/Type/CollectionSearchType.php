@@ -1,6 +1,6 @@
 <?php
 
-namespace FSC\Common\RestBundle\Form\Type;
+namespace FSC\RestBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -22,7 +22,7 @@ class CollectionSearchType extends CollectionType
 
     public function getName()
     {
-        return 'fsc_common_rest_collection_search';
+        return 'fsc_rest_collection_search';
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -30,7 +30,7 @@ class CollectionSearchType extends CollectionType
         parent::setDefaultOptions($resolver);
 
         $resolver->setDefaults(array(
-            'data_class' => 'FSC\Common\RestBundle\Form\Model\CollectionSearch',
+            'data_class' => 'FSC\RestBundle\Form\Model\CollectionSearch',
         ));
     }
 }

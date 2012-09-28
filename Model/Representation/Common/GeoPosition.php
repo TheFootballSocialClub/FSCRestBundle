@@ -1,6 +1,6 @@
 <?php
 
-namespace FSC\Common\RestBundle\Model\Representation\Common;
+namespace FSC\RestBundle\Model\Representation\Common;
 
 use JMS\SerializerBundle\Annotation as Serializer;
 

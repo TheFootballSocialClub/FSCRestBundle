@@ -1,6 +1,6 @@
 <?php
 
-namespace FSC\Common\RestBundle\Routing;
+namespace FSC\RestBundle\Routing;
 
 interface RouteNameProviderInterface
 {

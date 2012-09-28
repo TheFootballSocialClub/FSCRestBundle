@@ -1,10 +1,10 @@
 <?php
 
-namespace FSC\Common\RestBundle\Model\Representation\Form;
+namespace FSC\RestBundle\Model\Representation\Form;
 
 use JMS\SerializerBundle\Annotation as Serializer;
 
-use FSC\Common\RestBundle\Model\Representation\AtomLink;
+use FSC\RestBundle\Model\Representation\AtomLink;
 
 /**
  * Form
@@ -49,6 +49,13 @@ class Form
      * @Serializer\XmlList(inline = true, entry = "input")
      */
     public $inputs;
+
+    /**
+     * @var array
+     *
+     * @Serializer\XmlList(inline = true, entry = "select")
+     */
+    public $selects;
 
     /**
      * @var array

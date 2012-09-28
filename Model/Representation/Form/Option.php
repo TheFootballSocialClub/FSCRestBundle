@@ -5,9 +5,9 @@ namespace FSC\RestBundle\Model\Representation\Form;
 use JMS\SerializerBundle\Annotation as Serializer;
 
 /**
- * @Serializer\XmlRoot("textarea")
+ * @Serializer\XmlRoot("option")
  */
-class Textarea extends Element
+class Option extends Element
 {
     /**
      * @Serializer\XmlValue

@@ -1,11 +1,10 @@
 <?php
 
-namespace FSC\Common\RestBundle\REST;
+namespace FSC\RestBundle\REST;
 
 use Doctrine\Common\Util\ClassUtils;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\Form\Form;
@@ -16,26 +15,34 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-use FSC\Common\RestBundle\Form\Model\Collection;
-use FSC\Common\RestBundle\Form\Type\CollectionType;
-use FSC\Common\RestBundle\Model\Representation\Collection as CollectionRepresentation;
-use FSC\Common\RestBundle\Routing\RouteNameProviderInterface;
-use FSC\Common\RestBundle\Routing\RouteNameProvider;
-use FSC\Common\RestBundle\Routing\UrlGeneratorInterface;
-use FSC\Common\RestBundle\Routing\UrlGenerator;
-
+use FSC\RestBundle\Form\Model\Collection;
+use FSC\RestBundle\Form\Type\CollectionType;
+use FSC\RestBundle\Model\Representation\Collection as CollectionRepresentation;
+use FSC\RestBundle\Routing\RouteNameProviderInterface;
+use FSC\RestBundle\Routing\RouteNameProvider;
+use FSC\RestBundle\Routing\UrlGeneratorInterface;
+use FSC\RestBundle\Routing\UrlGenerator;
+use FSC\RestBundle\Normalizer\FormNormalizer;
+use FSC\RestBundle\REST\Description\FormDescription;
 
 /**
  * @author Adrien Brault <adrien.brault@gmail.com>
  */
 abstract class AbstractResource
 {
-    /** @var RouterInterface */
+    /**
+     * @var RouterInterface
+     */
     protected $router;
 
+    /**
+     * @var FormNormalizer
+     */
     protected $formNormalizer;
 
-    /** @var FormFactory */
+    /**
+     * @var FormFactory
+     */
     protected $formFactory;
 
     /**
@@ -48,10 +55,14 @@ abstract class AbstractResource
      */
     protected $securityContext;
 
-    /** @var RouteNameProviderInterface */
+    /**
+     * @var RouteNameProviderInterface
+     */
     protected $routeNameProvider;
 
-    /** @var UrlGeneratorInterface */
+    /**
+     * @var UrlGeneratorInterface
+     */
     protected $urlGenerator;
 
     /**
@@ -66,113 +77,77 @@ abstract class AbstractResource
     private $configurationEntityCollections;
     private $configurationEntityRelations;
 
-    public function setRouter(RouterInterface $router)
+    public function __construct(RouterInterface $router, FormNormalizer $formNormalizer, FormFactory $formFactory,
+                                AtomLinkFactory $atomLinkFactory, SecurityContextInterface $securityContext,
+                                ContainerInterface $container)
     {
+        $this->configuration = $this->configure();
+        $this->configurationCollection = $this->configureCollection();
+        $this->configurationCollectionSearch = $this->configureCollectionSearch();
+        $this->configurationEntity = $this->configureEntity();
+        $this->configurationEntityCollections = $this->configureEntityCollections();
+        $this->configurationEntityRelations = $this->configureEntityRelations();
+
         $this->router = $router;
-    }
-
-    public function setFormNormalizer($formNormalizer)
-    {
         $this->formNormalizer = $formNormalizer;
-    }
-
-    public function setFormFactory(FormFactory $formFactory)
-    {
         $this->formFactory = $formFactory;
-    }
-
-    public function setAtomLinkFactory(AtomLinkFactory $atomLinkFactory)
-    {
         $this->atomLinkFactory = $atomLinkFactory;
-    }
-
-    public function setSecurityContext(SecurityContextInterface $securityContext)
-    {
         $this->securityContext = $securityContext;
+        $this->container = $container;
+
+        $this->routeNameProvider = new RouteNameProvider($this->getConfiguration()['route_name_prefix']);
+        $this->urlGenerator = new UrlGenerator($this->router, $this->routeNameProvider);
+
+        // Normalizer
+        foreach ($this->configurationEntityCollections as $rel => $config) {
+            $this->configurationEntityCollections[$rel]['route_rel'] = $this->getRouteNameProvider()->normalizeRel($rel);
+        }
     }
 
     public function getConfiguration()
     {
-        if (null === $this->configuration) {
-            $this->configuration = $this->configure();
-        }
-
         return $this->configuration;
     }
 
     public function getConfigurationCollection()
     {
-        if (null === $this->configurationCollection) {
-            $this->configurationCollection = $this->configureCollection();
-        }
-
         return $this->configurationCollection;
     }
 
     public function getConfigurationCollectionSearch()
     {
-        if (null === $this->configurationCollectionSearch) {
-            $this->configurationCollectionSearch = $this->configureCollectionSearch();
-        }
-
         return $this->configurationCollectionSearch;
     }
 
     public function getConfigurationEntity()
     {
-        if (null === $this->configurationEntity) {
-            $this->configurationEntity = $this->configureEntity();
-        }
-
         return $this->configurationEntity;
     }
 
     public function getConfigurationEntityCollections()
     {
-        if (null === $this->configurationEntityCollections) {
-            $this->configurationEntityCollections = $this->configureEntityCollections();
-        }
-
         return $this->configurationEntityCollections;
     }
 
     public function getConfigurationEntityRelations()
     {
-        if (null === $this->configurationEntityRelations) {
-            $this->configurationEntityRelations= $this->configureEntityRelations();
-        }
-
         return $this->configurationEntityRelations;
     }
 
     public function getRouteNameProvider()
     {
-        if (null === $this->routeNameProvider) {
-            $this->routeNameProvider = new RouteNameProvider($this->getConfiguration()['route_name_prefix']);
-        }
-
         return $this->routeNameProvider;
     }
 
     public function getUrlGenerator()
     {
-        if (null === $this->urlGenerator) {
-            $this->urlGenerator = new UrlGenerator($this->router, $this->getRouteNameProvider());
-        }
-
         return $this->urlGenerator;
-    }
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
     }
 
     protected function configure()
     {
         // Prefix (ie: /users)
         // Route Name Prefix (ie: fsc_core_user_rest_users ...)
-
         return array(
             'prefix' => null,
             'route_name_prefix' => $this->guessRouteNamePrefix(),
@@ -183,11 +158,9 @@ abstract class AbstractResource
     protected function configureCollection()
     {
         // Query Builder
-
         return array(
             'xml_root_name' => null,
-            'representation_class' => 'FSC\Common\RestBundle\Model\Representation\Collection',
-            'expanded_forms' => array(),
+            'representation_class' => 'FSC\RestBundle\Model\Representation\Collection',
         );
     }
 
@@ -195,7 +168,6 @@ abstract class AbstractResource
     {
         // Form instance
         // Form object to bind
-
         return array(
             'create_form' => function () {
                 return $this->formFactory->createNamed('search', new CollectionType());
@@ -209,7 +181,7 @@ abstract class AbstractResource
     protected function configureEntity()
     {
         return array(
-            'representation_class' => 'FSC\Common\RestBundle\Model\Representation\Entity',
+            'representation_class' => 'FSC\RestBundle\Model\Representation\Entity',
             'normalize_attributes' => array(
                 'id' => 'getId',
             ),
@@ -226,7 +198,17 @@ abstract class AbstractResource
     protected function configureEntityCollections()
     {
         return array(
-
+            /*
+            'supporters' => array(
+                'representation_class' => 'FSC\Core\UserBundle\Model\Representation\Users',
+                'resources' => array(
+                    'FSC\Core\UserBundle\Entity\User' => 'fsc.core.user.resource.users',
+                ),
+                'create_qb' => function ($em, $repository, $entity) {
+                    return $this->getRepository()->createSelectNonDeletedBySupportedQB($entity);
+                },
+            ),
+            */
         );
     }
 
@@ -240,7 +222,7 @@ abstract class AbstractResource
                 'resources' => array(
                     'FSC\Core\MainBundle\Entity\Address' => 'fsc.core.main.resource.addresses',
                 ),
-                'create_qb' => function ($entity) {
+                'create_qb' => function ($em, $repository, $entity) {
                     $entityAddressesIds = $this->getRepository()->getEntityCollectionIds($entity, 'addresses');
 
                     return $this->entityManager->getRepository('FSCCoreMainBundle:Address')->createSelectByIdsQB($entityAddressesIds);
@@ -283,8 +265,9 @@ abstract class AbstractResource
         // Entity collections
         foreach ($this->getConfigurationEntityCollections() as $rel => $entityCollection) {
             $entityCollectionPrefix = $entityPrefix.'/'.$rel;
+            $routeRel = $entityCollection['route_rel'];
 
-            $routes->add($resourceRouteNameProvider->getEntityCollectionRouteName($rel), new Route($entityCollectionPrefix, array(
+            $routes->add($resourceRouteNameProvider->getEntityCollectionRouteName($routeRel), new Route($entityCollectionPrefix, array(
                 '_controller' => $serviceId.':getEntityCollectionAction',
             ), array(
                 '_method' => 'GET',
@@ -295,7 +278,7 @@ abstract class AbstractResource
 
             $formRel = 'search';
             $routes->add(
-                $resourceRouteNameProvider->getEntityCollectionFormRouteName($rel, $formRel),
+                $resourceRouteNameProvider->getEntityCollectionFormRouteName($routeRel, $formRel),
                 new Route($entityCollectionFormsPrefix.'/'.$formRel, array(
                     '_controller' => $serviceId.':getEntityCollectionFormAction',
                 ), array(
@@ -359,22 +342,32 @@ abstract class AbstractResource
 
         // Entity collections
         foreach ($this->getConfigurationEntityCollections() as $entityCollectionRel => $configurationEntityCollection) {
+            if (isset($configurationEntityCollection['can_see']) && !$configurationEntityCollection['can_see']($this->securityContext, $entity)) {
+                continue;
+            }
+
             if ($doNotExpandRelationsAndCollections || !in_array($entityCollectionRel, $this->getConfigurationEntity()['expanded_collections'])) {
                 $entityRepresentation->addLink($this->atomLinkFactory->create(
                     $entityCollectionRel,
                     $this->getUrlGenerator()->generateEntityCollectionUrl($entity, $entityCollectionRel)
                 ));
             } else {
-                $entityRelationRepresentation = $this->getEntityCollectionRepresentation($entity, $entityCollectionRel, true);
-                $entityRelationRepresentation->rel = $entityCollectionRel;
+                $entityRelationSearchFormDescription = $this->createEntityCollectionSearchFormDescription($entity, $entityCollectionRel);
+                $entityRelationPager = $this->getEntityCollectionPager($entity, $entityRelationSearchFormDescription->getData(), $entityCollectionRel);
+                $entityRelationRepresentation = $this->normalizeEntityCollection($entity, $entityCollectionRel, $entityRelationPager, $entityRelationSearchFormDescription);
+
+                $entityRelationRepresentation->rel = $this->atomLinkFactory->getRel($entityCollectionRel);
                 $entityRepresentation->addCollection($entityRelationRepresentation);
             }
         }
 
         // Entity relations
         foreach ($this->getConfigurationEntityRelations() as $entityRelationRel => $entityRelationConfiguration) {
-            $getRelation = $entityRelationConfiguration['get_relation'];
-            $entityRelation = $getRelation($entity);
+            $entityRelation = $this->getEntityRelation($entity, $entityRelationRel);
+
+            if (null === $entityRelation) {
+                continue;
+            }
 
             $entityRelationClassName = ClassUtils::getRealClass(get_class($entityRelation));
             $entityRelationResource = $this->container->get($entityRelationConfiguration['resources'][$entityRelationClassName]);
@@ -386,11 +379,11 @@ abstract class AbstractResource
                 || !in_array($entityRelationRel, $this->getConfigurationEntity()['expanded_relations'])) {
                 $entityRepresentation->addLink($this->atomLinkFactory->create(
                     $entityRelationRel,
-                    $entityRelationResource->getUrlGenerator()->generateEntityUrl($entity)
+                    $entityRelationResource->getUrlGenerator()->generateEntityUrl($entityRelation)
                 ));
             } else {
                 $entityRelationRepresentation = $entityRelationResource->normalizeEntity($entityRelation, true);
-                $entityRelationRepresentation->rel = $entityRelationRel;
+                $entityRelationRepresentation->rel = $this->atomLinkFactory->getRel($entityRelationRel);
                 $entityRepresentation->addRelation($entityRelationRepresentation);
             }
         }
@@ -398,7 +391,7 @@ abstract class AbstractResource
         return $entityRepresentation;
     }
 
-    public function normalizeCollection(Pagerfanta $pager, $searchForm)
+    public function normalizeCollection(Pagerfanta $pager, FormDescription $formDescription)
     {
         $collectionRepresentationClass = $this->getConfigurationCollection()['representation_class'];
         $collectionRepresentation = new $collectionRepresentationClass();
@@ -412,28 +405,19 @@ abstract class AbstractResource
         }
 
         // Forms
-        $formRel = 'search';
-        $collectionFormSearchURL = $this->getUrlGenerator()->generateCollectionFormUrl($formRel);
-
-        if (in_array($formRel, $this->getConfigurationCollection()['expanded_forms'])) {
-            $formRepresentation = $this->formNormalizer->normalize($searchForm);
-            $formRepresentation->rel = $formRel;
-            $formRepresentation->method = 'GET';
-            $formRepresentation->action = $this->getUrlGenerator()->generateCollectionUrl();
-
-            $formRepresentation->addLink($this->atomLinkFactory->create('self', $collectionFormSearchURL));
-
-            $collectionRepresentation->addForm($formRepresentation);
-        } else {
-            $collectionRepresentation->addLink($this->atomLinkFactory->create($formRel, $collectionFormSearchURL));
-        }
+        $collectionRepresentation->addForm($this->formNormalizer->normalizeFormDescription($formDescription));
 
         return $collectionRepresentation;
     }
 
-    protected function normalizeEntityCollection($entity, $rel, Pagerfanta $pager, $searchForm, $doNotExpandRelationsAndCollections = false)
+    public function normalizeEntityCollection($entity, $rel, Pagerfanta $pager, FormDescription $formDescription)
     {
         $configurationEntityCollection = $this->getConfigurationEntityCollections()[$rel];
+
+        if (isset($configurationEntityCollection['can_see']) && !$configurationEntityCollection['can_see']($this->securityContext, $entity)) {
+            throw new AccessDeniedException();
+        }
+
         $entityCollectionRepresentationClass = $configurationEntityCollection['representation_class'];
         $entityCollectionRepresentation = new $entityCollectionRepresentationClass();
 
@@ -442,39 +426,15 @@ abstract class AbstractResource
         // Results
         $entityCollectionRepresentation->results = array();
         foreach ($pager->getCurrentPageResults() as $entity) {
-            $entityResource = $this->container->get($configurationEntityCollection['resources'][get_class($entity)]);
-            $entityCollectionRepresentation->results[] = $entityResource->normalizeEntity($entity, $doNotExpandRelationsAndCollections);
+            $class = ClassUtils::getRealClass(get_class($entity));
+            $entityResource = $this->container->get($configurationEntityCollection['resources'][$class]);
+            $entityCollectionRepresentation->results[] = $entityResource->normalizeEntity($entity, true);
         }
 
-        // Forms
-        $formRel = 'search';
-        $entityCollectionFormSearchURL = $this->getUrlGenerator()->generateEntityCollectionFormUrl($entity, $rel, $formRel);
-
-        if (in_array($formRel, $configurationEntityCollection['expanded_forms'])) {
-            $formRepresentation = $this->formNormalizer->normalize($searchForm);
-            $formRepresentation->rel = $formRel;
-            $formRepresentation->method = 'GET';
-            $formRepresentation->action = $this->getUrlGenerator()->generateEntityCollectionUrl($entity, $rel);
-
-            $formRepresentation->addLink($this->atomLinkFactory->create('self', $entityCollectionFormSearchURL));
-
-            $entityCollectionRepresentation->addForm($formRepresentation);
-        } else {
-            $entityCollectionRepresentation->addLink($this->atomLinkFactory->create($formRel, $entityCollectionFormSearchURL));
-        }
+        // Search form
+        $entityCollectionRepresentation->addForm($this->formNormalizer->normalizeFormDescription($formDescription));
 
         return $entityCollectionRepresentation;
-    }
-
-    public function normalizeForm(Form $form, $actionUrl, $linkHref)
-    {
-        $formRepresentation = $this->formNormalizer->normalize($form);
-        $formRepresentation->method = 'GET';
-        $formRepresentation->action = $actionUrl;
-
-        $formRepresentation->addLink($this->atomLinkFactory->create('self', $linkHref));
-
-        return $formRepresentation;
     }
 
     protected function configureCollectionRepresentation(CollectionRepresentation $collectionRepresentation, Pagerfanta $pager, $entity = null, $collectionRel = null)
@@ -513,20 +473,83 @@ abstract class AbstractResource
         $collectionRepresentation->addLink($this->atomLinkFactory->create('last', $createRoute($pager->getNbPages(), $pager->getMaxPerPage())));
     }
 
-    public function getEntityCollectionRepresentation($entity, $rel, $doNotExpandRelationsAndCollections = false)
+    public function createCollectionFormDescription($rel, Request $request = null)
     {
-        $createSearch = $this->getConfigurationCollectionSearch()['create_form_object'];
+        if ('search' == $rel) {
+            return $this->createCollectionSearchFormDescription($request);
+        }
+
+        throw new \Exception('Not implemented, sorry!');
+    }
+
+    public function createCollectionSearchFormDescription(Request $request = null)
+    {
         $createForm = $this->getConfigurationCollectionSearch()['create_form'];
-        $search = $createSearch();
-        $searchForm = $createForm();
-        $searchForm->setData($search);
+        $createFormData = $this->getConfigurationCollectionSearch()['create_form_object'];
+        $form = $createForm();
+        $formData = $createFormData();
+        $form->setData($formData);
 
-        $pager = $this->getEntityCollectionPager($entity, $search, $rel);
+        if (null !== $request) {
+            $form->bind($request);
+        }
 
-        return $this->normalizeEntityCollection($entity, $rel, $pager, $searchForm, $doNotExpandRelationsAndCollections);
+        $rel = 'search';
+        $method = 'GET';
+        $actionUrl = $this->urlGenerator->generateCollectionUrl();
+
+        $selfUrl = $this->getUrlGenerator()->generateCollectionFormUrl($rel);
+
+        return new FormDescription($rel, $method, $actionUrl, $form, $formData, $selfUrl);
+    }
+
+    public function createEntityCollectionFormDescription($rel, $entity, $collectionRel, Request $request = null)
+    {
+        if ('search' == $rel) {
+            return $this->createEntityCollectionSearchFormDescription($entity, $collectionRel, $request);
+        }
+
+        throw new \Exception('Not implemented, sorry!');
+    }
+
+    public function createEntityCollectionSearchFormDescription($entity, $collectionRel, Request $request = null)
+    {
+        $createForm = $this->getConfigurationCollectionSearch()['create_form'];
+        $createFormData = $this->getConfigurationCollectionSearch()['create_form_object'];
+        $form = $createForm();
+        $formData = $createFormData();
+        $form->setData($formData);
+
+        if (null !== $request) {
+            $form->bind($request);
+        }
+
+        $rel = 'search';
+        $method = 'GET';
+        $actionUrl = $this->urlGenerator->generateEntityCollectionUrl($entity, $collectionRel);
+
+        $selfUrl = $this->getUrlGenerator()->generateEntityCollectionFormUrl($entity, $collectionRel, $rel);
+
+        return new FormDescription($rel, $method, $actionUrl, $form, $formData, $selfUrl);
+    }
+
+    public function getEntityCollectionRelFromRouteRel($routeRel)
+    {
+        foreach ($this->configurationEntityCollections as $rel => $config) {
+            if ($config['route_rel'] == $routeRel) {
+                return $rel;
+            }
+        }
     }
 
     abstract public function getEntity(Request $request);
     abstract public function getCollectionPager(Collection $search);
     abstract public function getEntityCollectionPager($entity, Collection $search, $rel);
+
+    public function getEntityRelation($entity, $entityRelationRel)
+    {
+        $getRelation = $this->getConfigurationEntityRelations()[$entityRelationRel]['get_relation'];
+
+        return $getRelation($entity);
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace FSC\Common\RestBundle\REST;
+namespace FSC\RestBundle\REST;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
@@ -10,7 +10,7 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-use FSC\Common\RestBundle\Form\Model\Collection;
+use FSC\RestBundle\Form\Model\Collection;
 
 abstract class AbstractDoctrineResource extends AbstractResource
 {
@@ -25,7 +25,8 @@ abstract class AbstractDoctrineResource extends AbstractResource
     protected function configureCollection()
     {
         return array_merge(parent::configureCollection(), array(
-            'create_qb' => function () {
+            'pager_fetch_join_collection' => true,
+            'create_qb' => function ($em, $repository) {
                 $alias = substr($this->guessResourceName(), 0, 1);
 
                 return $this->getRepository()->createQueryBuilder($alias);
@@ -47,17 +48,24 @@ abstract class AbstractDoctrineResource extends AbstractResource
     public function getCollectionPager(Collection $search)
     {
         $createQb = $this->getConfigurationCollection()['create_qb'];
-        $qb = $createQb();
+        $qb = $createQb($this->entityManager, $this->getRepository());
 
-        return $this->createORMPager($qb, $search);
+        return $this->createORMPager($qb, $search, $this->getConfigurationCollection()['pager_fetch_join_collection']);
     }
 
     public function getEntityCollectionPager($entity, Collection $search, $rel)
     {
         $createQb = $this->getConfigurationEntityCollections()[$rel]['create_qb'];
-        $qb = $createQb($entity);
+        $qb = $createQb($this->entityManager, $this->getRepository(), $entity);
 
-        return $this->createORMPager($qb, $search);
+        return $this->createORMPager($qb, $search, @$this->getConfigurationEntityCollections()[$rel]['pager_fetch_join_collection'] !== false);
+    }
+
+    public function getEntityRelation($entity, $entityRelationRel)
+    {
+        $getRelation = $this->getConfigurationEntityRelations()[$entityRelationRel]['get_relation'];
+
+        return $getRelation($this->entityManager, $this->getRepository(), $entity);
     }
 
     protected function getRepository()
@@ -71,9 +79,9 @@ abstract class AbstractDoctrineResource extends AbstractResource
      *
      * @return Pagerfanta
      */
-    protected function createORMPager($query, Collection $collection = null)
+    protected function createORMPager($query, Collection $collection = null, $fetchJoinCollection = false)
     {
-        $pager = new Pagerfanta(new DoctrineORMAdapter($query));
+        $pager = new Pagerfanta(new DoctrineORMAdapter($query, $fetchJoinCollection));
 
         if (null !== $collection) {
             $pager->setMaxPerPage($collection->getLimit());

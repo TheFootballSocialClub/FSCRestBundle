@@ -85,7 +85,6 @@ use FSC\Core\MainBundle\REST\AbstractSocialEntityResource;
 use FSC\Common\RestBundle\Form\Model\Collection;
 use FSC\Core\TeamBundle\Repository\FormationRepository;
 use FSC\Core\SpotBundle\Repository\SpotRepository;
-use FSC\Core\SpotBundle\Manager\LinkSpotRoleCreatorManager;
 
 class TeamsResource extends AbstractSocialEntityResource
 {
@@ -97,6 +96,7 @@ class TeamsResource extends AbstractSocialEntityResource
         ));
     }
 
+    // Configure root collection ... /teams
     protected function configureCollection()
     {
         return array_merge(parent::configureCollection(), array(
@@ -106,6 +106,13 @@ class TeamsResource extends AbstractSocialEntityResource
         ));
     }
 
+    // Configure how each entity representation looks like
+    // ie:
+    //
+    // <team id="">
+    //   <name></name>
+    //   ...
+    // </team>
     protected function configureEntity()
     {
         return array_merge(parent::configureEntity(), array(
@@ -124,11 +131,15 @@ class TeamsResource extends AbstractSocialEntityResource
         ));
     }
 
+    // Configure each entity collection, ie: a teams has formations, so you'll have a collection
+    // at /teams/{id}/formations
     protected function configureEntityCollections()
     {
         return array_merge_recursive(parent::configureEntityCollections(), array(
             'formations' => array(
                 'representation_class' => 'FSC\Core\TeamBundle\Model\Representation\Formations',
+
+                // Which resources should be asked to normalize the collection elements ...
                 'resources' => array(
                     'FSC\Core\TeamBundle\Entity\Formation' => 'fsc.core.team.resource.formations',
                 ),
@@ -162,7 +173,6 @@ namespace FSC\Core\SpotBundle\REST;
 use FSC\Core\MainBundle\REST\AbstractSocialEntityResource;
 use FSC\Common\RestBundle\Form\Model\Collection;
 use FSC\Core\TeamBundle\Repository\TeamRepository;
-use FSC\Core\SpotBundle\Manager\LinkSpotRoleCreatorManager;
 
 class SpotsResource extends AbstractSocialEntityResource
 {
@@ -227,7 +237,7 @@ class SpotsResource extends AbstractSocialEntityResource
         return array_merge(parent::configureEntityRelations(), array(
             'creator' => array(
                 'get_relation' => function ($em, $repository, $spot) {
-                    return $this->linkManager->getSpotCreator($spot);
+                    return $spot->getSpotCreator();
                 },
                 'resources' => array(
                     'FSC\Core\UserBundle\Entity\User' => 'fsc.core.user.resource.users',

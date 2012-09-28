@@ -6,6 +6,11 @@ ATM it can only generate a read only api, backed by doctrine ORM.
 
 The design tooks obviously many shortchuts, and is not an example of OOP design, but it works.
 
+This bundle was extracted from an app, and need some love to be usable. (ie composer, make tests work etc ...)
+
+Be aware that this bundle relies on a fork of JMSSerializerBundle, because this PR is still not merged:
+https://github.com/schmittjoh/JMSSerializerBundle/pull/164
+
 Example
 -------
 

@@ -15,6 +15,11 @@ for each resource...
 
 This bundle was extracted from an app, and need some love to be usable. (ie composer, make tests work etc ...)
 
+TODO
+----
+
+* Create a "sanbox" symfony2 app to demonstrate how to fully use the bundle
+
 Installation
 ------------
 

@@ -15,6 +15,43 @@ for each resource...
 
 This bundle was extracted from an app, and need some love to be usable. (ie composer, make tests work etc ...)
 
+Installation
+------------
+
+Edit your composer.json like this:
+
+```
+{
+    "require": {
+        ...
+        "jms/serializer-bundle": "dev-xml-attribute-map as 0.9.0",
+        "fsc/rest-bundle": "*"
+        ...
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/adrienbrault/JMSSerializerBundle"
+        }
+    ]
+}
+```
+
+Update your deps: `composer update`.
+
+Add the bundle to your AppKernel:
+
+```
+// in AppKernel::registerBundles()
+$bundles = array(
+    // ...
+    new FSC\RestBundle\FSCRestBundle(),
+    new JMS\SerializerBundle\JMSSerializerBundle(),
+    new FOS\FOSRestBundle(),
+    // ...
+);
+```
+
 Be aware that this bundle relies on a fork of JMSSerializerBundle, because this PR is still not merged:
 https://github.com/schmittjoh/JMSSerializerBundle/pull/164
 

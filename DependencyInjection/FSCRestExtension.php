@@ -34,4 +34,9 @@ class FSCRestExtension extends Extension
             $rootControllerDefinition->addMethodCall('addRoute', array($rel, $route));
         }
     }
+
+    public function getAlias()
+    {
+        return 'fsc_rest';
+    }
 }

@@ -1,10 +1,8 @@
 <?php
 
-namespace FSC\RestBundle\Test;
+namespace FSC\RestBundle\Tests\Functional;
 
-use FSC\Test\FunctionalTestCase;
-
-abstract class SerializationTestCase extends FunctionalTestCase
+abstract class SerializationTestCase extends TestCase
 {
     protected function assertSerializedXmlEquals($expectedXml, $value)
     {

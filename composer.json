@@ -1,13 +1,21 @@
 {
     "name": "fsc/rest-bundle",
     "require": {
-        "jms/serializer-bundle": "dev-xml-attribute-map as 0.9.0"
+        "jms/serializer-bundle": "dev-xml-attribute-map as 0.9.0",
+        "friendsofsymfony/rest-bundle": "dev-master"
     },
-    "repositories": {
+    "require-dev": {
+        "symfony/symfony": "2.1.*"
+    },
+    "repositories": [
         {
             "type": "vcs",
             "url": "https://github.com/adrienbrault/JMSSerializerBundle"
         }
-    }
+    ],
+    "autoload": {
+        "psr-0": { "FSC\\RestBundle": "" }
+    },
+    "target-dir": "FSC/RestBundle",
+    "minimum-stability": "dev"
 }
-

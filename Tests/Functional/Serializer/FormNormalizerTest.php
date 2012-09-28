@@ -2,7 +2,7 @@
 
 namespace FSC\RestBundle\Tests\Functional\Serializer;
 
-use FSC\RestBundle\Test\SerializationTestCase;
+use FSC\RestBundle\Tests\Functional\SerializationTestCase;
 use Symfony\Component\Serializer\Serializer as SymfonySerializer;
 
 use FSC\RestBundle\Normalizer\FormNormalizer;

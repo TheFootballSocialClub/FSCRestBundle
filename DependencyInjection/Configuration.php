@@ -15,6 +15,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('root_controller')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->variableNode('resources')
                             ->defaultValue(array())

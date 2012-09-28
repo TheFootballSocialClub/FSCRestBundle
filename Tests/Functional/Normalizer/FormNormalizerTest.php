@@ -2,12 +2,11 @@
 
 namespace FSC\RestBundle\Tests\Functional\Normalizer;
 
-use FSC\Test\FunctionalTestCase;
-
+use FSC\RestBundle\Tests\Functional\TestCase;
 use FSC\RestBundle\Form\Model\Collection;
 use FSC\RestBundle\Form\RestRendererEngine;
 
-class FormNormalizerTest extends FunctionalTestCase
+class FormNormalizerTest extends TestCase
 {
     public function test()
     {

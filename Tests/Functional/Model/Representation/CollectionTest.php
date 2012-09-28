@@ -2,7 +2,7 @@
 
 namespace FSC\RestBundle\Tests\Functional\Model\Representation;
 
-use FSC\RestBundle\Test\SerializationTestCase;
+use FSC\RestBundle\Tests\Functional\SerializationTestCase;
 
 use FSC\RestBundle\Model\Representation\Collection;
 use FSC\RestBundle\Model\Representation\AtomLink;

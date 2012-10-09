@@ -30,7 +30,7 @@ Installation
 
 Edit your composer.json like this:
 
-```
+```json
 {
     "require": {
         ...
@@ -51,7 +51,7 @@ Update your deps: `composer update`.
 
 Add the bundle to your AppKernel:
 
-```
+```php
 // in AppKernel::registerBundles()
 $bundles = array(
     // ...
@@ -72,7 +72,7 @@ For an example of what the controller returns: https://gist.github.com/3800069
 
 You need to define services, tagged with `fsc_rest.resource`.
 
-```
+```yaml
 services:
     fsc.core.spot.resource.spots:
         class: FSC\Core\SpotBundle\REST\SpotsResource
@@ -81,7 +81,7 @@ services:
           - { name: fsc_rest.resource }
 ```
 
-```
+```php
 <?php
 
 namespace FSC\Core\TeamBundle\REST;
@@ -170,7 +170,7 @@ class TeamsResource extends AbstractSocialEntityResource
 }
 ```
 
-```
+```php
 <?php
 
 namespace FSC\Core\SpotBundle\REST;

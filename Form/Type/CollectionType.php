@@ -36,6 +36,7 @@ class CollectionType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'FSC\RestBundle\Form\Model\Collection',
+            'csrf_protection' => false,
         ));
     }
 }

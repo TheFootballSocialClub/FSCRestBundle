@@ -51,11 +51,6 @@ abstract class AbstractResource
     protected $atomLinkFactory;
 
     /**
-     * @var SecurityContextInterface
-     */
-    protected $securityContext;
-
-    /**
      * @var RouteNameProviderInterface
      */
     protected $routeNameProvider;
@@ -70,6 +65,11 @@ abstract class AbstractResource
      */
     protected $container;
 
+    /**
+     * @var SecurityContextInterface
+     */
+    protected $securityContext;
+
     private $configuration;
     private $configurationCollection;
     private $configurationCollectionSearch;
@@ -78,8 +78,7 @@ abstract class AbstractResource
     private $configurationEntityRelations;
 
     public function __construct(RouterInterface $router, FormNormalizer $formNormalizer, FormFactory $formFactory,
-                                AtomLinkFactory $atomLinkFactory, SecurityContextInterface $securityContext,
-                                ContainerInterface $container)
+                                AtomLinkFactory $atomLinkFactory, ContainerInterface $container)
     {
         $this->configuration = $this->configure();
         $this->configurationCollection = $this->configureCollection();
@@ -92,7 +91,6 @@ abstract class AbstractResource
         $this->formNormalizer = $formNormalizer;
         $this->formFactory = $formFactory;
         $this->atomLinkFactory = $atomLinkFactory;
-        $this->securityContext = $securityContext;
         $this->container = $container;
 
         $this->routeNameProvider = new RouteNameProvider($this->getConfiguration()['route_name_prefix']);
@@ -102,6 +100,14 @@ abstract class AbstractResource
         foreach ($this->configurationEntityCollections as $rel => $config) {
             $this->configurationEntityCollections[$rel]['route_rel'] = $this->getRouteNameProvider()->normalizeRel($rel);
         }
+    }
+
+    /**
+     * @param SecurityContextInterface $securityContext
+     */
+    public function setSecurityContext(SecurityContextInterface $securityContext)
+    {
+        $this->securityContext = $securityContext;
     }
 
     public function getConfiguration()

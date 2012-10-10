@@ -33,6 +33,13 @@ class FSCRestExtension extends Extension
         foreach ($config['root_controller']['routes'] as $rel => $route) {
             $rootControllerDefinition->addMethodCall('addRoute', array($rel, $route));
         }
+
+        if ($container->has('security.context')) {
+            $abstractResourceDefinition = $container->getDefinition('fsc.rest.resource.abstract');
+            $abstractResourceDefinition->addMethodCall('setSecurityContext', array(
+                $container->getDefinition('security.context'),
+            ));
+        }
     }
 
     public function getAlias()

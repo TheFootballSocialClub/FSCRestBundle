@@ -15,7 +15,6 @@ services:
             - @fsc.rest.normalizer.form
             - @form.factory
             - @fsc.rest.factory.atom_link
-            - @security.context
             - @service_container
 
     fsc.rest.resource.abstract_doctrine:

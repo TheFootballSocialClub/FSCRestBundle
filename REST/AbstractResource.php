@@ -314,9 +314,11 @@ abstract class AbstractResource
     public function normalizeEntity($entity, $doNotExpandRelationsAndCollections = false)
     {
         // Make sure that the used is authorized to see this resource
-        $canSee = $this->getConfigurationEntity()['can_see'];
-        if (false === $canSee($this->securityContext, $entity)) {
-            throw new AccessDeniedException();
+        if (null !== $this->securityContext) {
+            $canSee = $this->getConfigurationEntity()['can_see'];
+            if (false === $canSee($this->securityContext, $entity)) {
+                throw new AccessDeniedException();
+            }
         }
 
         $entityRepresentationClass = $this->getConfigurationEntity()['representation_class'];
@@ -348,7 +350,8 @@ abstract class AbstractResource
 
         // Entity collections
         foreach ($this->getConfigurationEntityCollections() as $entityCollectionRel => $configurationEntityCollection) {
-            if (isset($configurationEntityCollection['can_see']) && !$configurationEntityCollection['can_see']($this->securityContext, $entity)) {
+            if (isset($configurationEntityCollection['can_see'])
+                && null !== $this->securityContext && !$configurationEntityCollection['can_see']($this->securityContext, $entity)) {
                 continue;
             }
 
@@ -380,7 +383,7 @@ abstract class AbstractResource
 
             $canSeeEntityRelation = $entityRelationResource->getConfigurationEntity()['can_see'];
 
-            if (!$canSeeEntityRelation($this->securityContext, $entityRelation)
+            if ((null !== $this->securityContext && !$canSeeEntityRelation($this->securityContext, $entityRelation))
                 || $doNotExpandRelationsAndCollections
                 || !in_array($entityRelationRel, $this->getConfigurationEntity()['expanded_relations'])) {
                 $entityRepresentation->addLink($this->atomLinkFactory->create(
@@ -420,7 +423,8 @@ abstract class AbstractResource
     {
         $configurationEntityCollection = $this->getConfigurationEntityCollections()[$rel];
 
-        if (isset($configurationEntityCollection['can_see']) && !$configurationEntityCollection['can_see']($this->securityContext, $entity)) {
+        if (isset($configurationEntityCollection['can_see'])
+            && null !== $this->securityContext && !$configurationEntityCollection['can_see']($this->securityContext, $entity)) {
             throw new AccessDeniedException();
         }
 

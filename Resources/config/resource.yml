@@ -16,6 +16,8 @@ services:
             - @form.factory
             - @fsc.rest.factory.atom_link
             - @service_container
+        calls:
+            - [ setSecurityContext, [ @?security.context ] ]
 
     fsc.rest.resource.abstract_doctrine:
         abstract: true

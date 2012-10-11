@@ -1,6 +1,7 @@
 {
     "name": "fsc/rest-bundle",
     "require": {
+        "php": ">=5.4.0",
         "symfony/framework-bundle": "2.1.*",
         "jms/serializer-bundle": "dev-xml-attribute-map as 0.9.0",
         "friendsofsymfony/rest-bundle": "dev-master"

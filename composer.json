@@ -3,7 +3,7 @@
     "require": {
         "php": ">=5.4.0",
         "symfony/framework-bundle": "2.1.*",
-        "jms/serializer-bundle": "dev-xml-attribute-map as 0.9.0",
+        "jms/serializer-bundle": "1.0.*",
         "friendsofsymfony/rest-bundle": "dev-master"
     },
     "require-dev": {
@@ -13,12 +13,6 @@
         "symfony/form": "*",
         "symfony/validator": "*"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/adrienbrault/JMSSerializerBundle"
-        }
-    ],
     "autoload": {
         "psr-0": { "FSC\\RestBundle": "" }
     },

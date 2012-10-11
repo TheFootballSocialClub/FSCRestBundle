@@ -3,7 +3,7 @@
     "require": {
         "php": ">=5.4.0",
         "symfony/framework-bundle": "2.1.*",
-        "jms/serializer-bundle": "1.0.*",
+        "jms/serializer-bundle": "0.9.*",
         "friendsofsymfony/rest-bundle": "dev-master"
     },
     "require-dev": {
